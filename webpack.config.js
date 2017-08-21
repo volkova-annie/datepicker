@@ -2,10 +2,16 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const $ = require('jquery');
+const isDev = !process || process.env.NODE_ENV !== 'production';
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
+}
+
+let localIdentName = '[local]__[hash:base64:8]'
+
+if (!isDev) {
+  localIdentName = '[hash:base64:8]'
 }
 
 module.exports = {
@@ -46,20 +52,20 @@ module.exports = {
            {
              loader: 'css-loader',
              options: {
+               importLoaders: 1,
                modules: true,
-               localIdentName: '[hash:base64:5]',
-               importLoaders: 1
+               localIdentName: localIdentName
+             }
+           },
+           {
+             loader:'postcss-loader',
+             options: {
+               config: {
+                 path: path.resolve(process.cwd(), 'postcss.config.js')
+               },
+               sourceMap: 'inline'
              }
            }
-          //  {
-          //    loader:'postcss-loader',
-          //    options: {
-          //      config: {
-          //        path: path.resolve(process.cwd(), 'postcss.config.js')
-          //      },
-          //      sourceMap: 'inline'
-          //    }
-          //  }
           ]
         })
       }
@@ -74,13 +80,10 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"development"'
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+        // NODE_ENV: 'production'
       }
     }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery'
-    })
   ],
   resolve: {
     extensions: ['.js', '.vue', '.json'],
