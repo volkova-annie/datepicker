@@ -41,10 +41,10 @@
     "vue-template-compiler": "^2.4.2",
     "vuejs-datepicker": "^0.9.9",
     "vuex": "^2.3.1",
-    "webpack": "^3.5.5",
-    "zebra_datepicker": "^1.9.6"
+    "webpack": "^3.5.5"
   },
   "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "browser-sync": "^2.18.13"
   }
 }
